@@ -34,15 +34,10 @@
                 tax : 0,
                 salary : 0
             };
-            var _changeListeners = {
-                basic: [],
-                hra: [],
-                da: [],
-                tax: [],
-                salary: []
-            };
-            this.subscribe = function(attrName, callbackFn){
-                _changeListeners[attrName].push(callbackFn);
+            var _changeListeners = [];
+
+            this.subscribe = function(callbackFn){
+                _changeListeners.push(callbackFn);
             };
 
             this.get = function(attrName){
@@ -51,8 +46,7 @@
             this.set = function(attrName, val){
                 if (_data[attrName] === val) return;
                 _data[attrName] = val;
-                var callbackFns = _changeListeners[attrName];
-                callbackFns.forEach(function(callbackFn){
+                _changeListeners.forEach(function(callbackFn){
                     if (typeof callbackFn === 'function')
                         callbackFn();
                 });
@@ -68,7 +62,8 @@
         function SalaryCalculator(model){
             var $viewEl = this.$viewEl = $('<div></div>');
 
-            var _template = `
+            this.render = function(){
+                var _template = `
                 <section>
                     <div class="field">
                         <label for="">Basic :</label>
@@ -102,19 +97,17 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td id="tdBasic">[basic]</td>
-                                    <td id="tdHra">[hra]</td>
-                                    <td id="tdDa">[da]</td>
-                                    <td id="tdTax">[tax]</td>
-                                    <td id="tdSalary">[salary]</td>
+                                    <td id="tdBasic">${model.get('basic')}</td>
+                                    <td id="tdHra">${model.get('hra')}</td>
+                                    <td id="tdDa">${model.get('da')}</td>
+                                    <td id="tdTax">${model.get('tax')}</td>
+                                    <td id="tdSalary">${model.get('salary')}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </section>
             `
-            
-            this.render = function(){
                 $viewEl.html(_template);
             };
             
@@ -140,25 +133,9 @@
             });
 
             // Reacting to model changes
-            model.subscribe('salary', function () {
-                $('#tdSalary', $viewEl).text(model.get('salary'));
-            });
+            model.subscribe(this.render);
 
-            model.subscribe('basic', function () {
-                $('#tdBasic', $viewEl).text(model.get('basic'));
-            });
-
-            model.subscribe('hra', function () {
-                $('#tdHra', $viewEl).text(model.get('hra'));
-            });
-
-            model.subscribe('da', function () {
-                $('#tdDa', $viewEl).text(model.get('da'));
-            });
-
-            model.subscribe('tax', function () {
-                $('#tdTax', $viewEl).text(model.get('tax'));
-            });
+            
         }
 
         $(function(){

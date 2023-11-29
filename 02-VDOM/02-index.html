@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VDOM Demo</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script>
+        var rootEle;
+        var count = 0;
+        function onBtnRenderClick(){
+            count++
+            // VDOM
+            var appEle = React.createElement('div', null,
+                React.createElement('h1', null, 'React.js! - [' + count + ']'),
+                React.createElement('hr'),
+                React.createElement('div', null,
+                    React.createElement('span', null, 'Counter :'),
+                    React.createElement('span', null, count)
+                ),
+                React.createElement('div', null, 
+                    React.createElement('h3', null, 'Introduction'),
+                    React.createElement('p', null, 'Ea enim voluptate voluptate eu enim qui commodo commodo. Reprehenderit ad voluptate ad ut dolore fugiat qui dolor velit. Ea occaecat tempor nostrud exercitation elit commodo duis proident enim eiusmod do adipisicing commodo nulla. Enim sit eu in duis cupidatat mollit non velit in sit ut nisi Lorem duis. Et sit enim in culpa sunt cupidatat id cupidatat fugiat esse. Consectetur aliquip et id sunt eiusmod laborum.Tempor sint proident Lorem adipisicing. Mollit reprehenderit ipsum adipisicing ad aliqua voluptate aliqua occaecat. Quis labore amet dolor velit nostrud voluptate sint.'),
+                    React.createElement('p', null, 'Qui amet irure officia ex anim ad sunt occaecat in laborum duis labore mollit duis. Proident dolore id exercitation eiusmod velit laborum. Culpa esse ex eiusmod minim proident nostrud magna laboris veniam enim et. Sint cupidatat labore proident Lorem adipisicing consequat velit adipisicing officia est sint. Est nisi consequat amet fugiat cupidatat. Deserunt et commodo cillum elit aliqua est velit incididunt amet anim nisi. Ipsum reprehenderit cillum esse sit labore est.Dolore labore enim dolore ad enim eiusmod cillum consequat est magna elit quis consectetur. Esse occaecat excepteur irure excepteur consectetur aliquip. Sint cupidatat non pariatur cillum incididunt mollit pariatur officia proident est cillum et ipsum. Adipisicing enim tempor eiusmod sit. Proident ipsum culpa nostrud ad incididunt id id anim sunt labore. Reprehenderit ullamco nostrud elit aliquip quis culpa. Exercitation reprehenderit fugiat Lorem magna veniam anim.'),
+                    React.createElement('p', null, 'Nostrud deserunt laborum culpa eu anim anim consectetur ad culpa elit dolore. Nostrud qui dolor cupidatat consectetur veniam nulla mollit do officia culpa sint dolore aliqua. Fugiat Lorem sunt minim labore qui nostrud quis eu sint aute ad ea. Nostrud est nulla quis eiusmod velit. Lorem ut labore dolore exercitation minim ex velit sunt. Et sint mollit eu nisi excepteur irure fugiat proident consequat magna deserunt.Do adipisicing sunt aliqua excepteur id cillum. Proident proident exercitation id ipsum mollit. Eiusmod Lorem sit officia fugiat deserunt. Tempor et veniam in nostrud mollit ullamco ea ex occaecat ad commodo dolor.')
+                ),
+                React.createElement('div', null,
+                    React.createElement('h3', null, 'Advantages'),
+                    React.createElement('ul', null, 
+                        React.createElement('li', null, 'Declarative'),
+                        React.createElement('li', null, 'Efficient'),
+                    )
+                ),
+            )
+            rootEle.render(appEle);
+
+            // DOM
+            // count++;
+            document.getElementById('spanCounter').innerText = count;
+        }
+        function onDocumentLoad(){
+            var btnRender = document.getElementById('btnRender');
+            btnRender.addEventListener('click', onBtnRenderClick)
+
+            rootEle = ReactDOM.createRoot(document.getElementById('root'));
+        }
+        window.addEventListener('load', onDocumentLoad)
+    </script>
+</head>
+<body>
+    <button id="btnRender">Render</button>
+    <div id="root"></div>
+</body>
+</html>
