@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSX Demo</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+        var rootEle;
+        
+
+        function AppComponent(){
+            var countStateArr = React.useState(0);
+            var count = countStateArr[0],
+                setCount = countStateArr[1];
+            var onBtnIncrementClick = function(){
+                setCount(++count)
+            }
+            return (
+                <div>
+                    <h1>React - [{count}]</h1>
+                    <hr />
+                    <div>
+                        <span>Counter :</span>
+                        <span>{count}</span>
+                        <br/>
+                        <button onClick={onBtnIncrementClick}>Increment</button>
+                    </div> 
+                    <div>
+                        <h3>Introduction</h3>
+                        <p>Magna consequat minim culpa eu exercitation non ex consequat voluptate officia incididunt in ad. Cillum in in magna eu ex nulla pariatur nostrud dolor anim laborum aliquip enim. Ipsum dolor occaecat in culpa pariatur.</p>
+                        <p>Adipisicing sint incididunt aute reprehenderit ex id eu reprehenderit est nisi aute sint. Esse culpa et enim ullamco nostrud Lorem magna in mollit fugiat aute. Amet eu commodo occaecat sint magna consequat laborum nulla ex deserunt laboris sunt sint et. Deserunt aliqua cupidatat cupidatat qui consectetur. Laborum officia sit eu minim ad aliqua ullamco consectetur quis eiusmod laboris anim.</p>
+                        <p>Cupidatat sint elit deserunt ullamco enim minim irure amet officia ullamco duis. Velit dolore eiusmod adipisicing cupidatat velit dolore. Do consequat pariatur esse voluptate laboris do tempor tempor. Culpa culpa ad aliqua tempor amet veniam. Voluptate velit in non cillum fugiat in aliquip adipisicing duis aliqua minim in nulla excepteur.</p>
+                    </div>
+                    <div>
+                        <h3>Advantages</h3>
+                        <ul>
+                            <li>Declarative</li>
+                            <li>Efficient</li>
+                        </ul>
+                    </div>
+                </div>
+            )
+        }
+        function onBtnRenderClick(){
+            
+            // VDOM
+            /* 
+            var appEle = React.createElement(AppComponent)
+            rootEle.render(appEle); 
+            */
+
+            /* 
+            var appEle = <AppComponent/>
+            rootEle.render(appEle);  
+            */
+
+            // rootEle.render(<AppComponent />); 
+
+            rootEle.render(
+                <div>
+                <AppComponent />
+                <AppComponent/>
+                </div>
+                ); 
+
+            // DOM
+            // count++;
+            // document.getElementById('spanCounter').innerText = count;
+        }
+        function onDocumentLoad(){
+            var btnRender = document.getElementById('btnRender');
+            btnRender.addEventListener('click', onBtnRenderClick)
+
+            rootEle = ReactDOM.createRoot(document.getElementById('root'));
+        }
+        window.addEventListener('load', onDocumentLoad)
+    </script>
+</head>
+<body>
+    <button id="btnRender">Render</button>
+    <div id="root"></div>
+</body>
+</html>
