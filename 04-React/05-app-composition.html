@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        .field{
+            margin-bottom: 5px;
+        }
+        label{
+            display: block;
+        }
+        .result{
+            font-size: 18pt;
+        }
+        .positive {
+            color : green;
+        }
+        .negative{
+            color : red;
+        }
+        .highlight {
+            font-size: 18pt;
+            color : blueviolet;
+        }
+    </style>
+    <script src="babel.min.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script type="text/babel">
+        const Calculator = () => {
+            const [result, setResult] = React.useState(0);
+            const [n1, setN1] = React.useState(0);
+            const [n2, setN2] = React.useState(0);
+
+            /* 
+            const onBtnClick = (evt) => {
+                switch (evt.target.innerText) {
+                    case 'Add':
+                        setResult(n1 + n2)
+                        break;
+                    case 'Subtract':
+                        setResult(n1 - n2)
+                        break;
+                    case 'Multiply':
+                        setResult(n1 * n2)
+                        break;
+                    case 'Divide':
+                        setResult(n1 / n2)
+                        break;
+                
+                    default:
+                        break;
+                }
+            } 
+            */
+           const onBtnClick = (operation) => {
+                switch (operation) {
+                    case 'Add':
+                        setResult(n1 + n2)
+                        break;
+                    case 'Subtract':
+                        setResult(n1 - n2)
+                        break;
+                    case 'Multiply':
+                        setResult(n1 * n2)
+                        break;
+                    case 'Divide':
+                        setResult(n1 / n2)
+                        break;
+
+                    default:
+                        break;
+                }
+            } 
+            return (
+                <>
+                    <h3>Calculator</h3>
+                    <div className="field">
+                        <label for="">Number 1:</label>
+                        <input type="number" onInput={(evt) => setN1(parseInt(evt.target.value))}/>
+                    </div>
+                    <div className="field">
+                        <label for="">Number 2:</label>
+                        <input type="number" onInput={(evt) => setN2(parseInt(evt.target.value))}/>
+                    </div>
+                    <br/>
+                    <button onClick={() => onBtnClick('Add')}>Add</button>
+                    <button onClick={() => onBtnClick('Subtract')}>Subtract</button>
+                    <button onClick={() => onBtnClick('Multiply')}>Multiply</button>
+                    <button onClick={() => onBtnClick('Divide')}>Divide</button>
+                    <CalculatorResult result={result}/>
+                </>
+            )
+        }
+
+        const CalculatorResult = ({result}) => {
+            return <div className={`result ${result >= 0 ? 'positive' : 'negative'}`}>{result}</div>
+        }
+
+        const HelloWorld = ({ msg, children }) => {
+                // console.log(`x : ${props.x}, y : ${props.y}`)
+                /* 
+                const {x,y} = props;
+                */
+                // console.log(`x : ${x}, y : ${y}`) 
+                let [greetMsg, setGreetMsg] = React.useState('[default greet message]');
+                let [userName, setUserName] = React.useState('');
+
+                const onBtnGreetClick = () => {
+                    setGreetMsg(`Hi ${userName}, ${msg}`);
+                };
+
+                const onTxtUserNameInput = (evt) => {
+                    setUserName(evt.target.value);
+                };
+
+                return (
+                    <>
+                        <h3>Greeter</h3>
+                        <hr />
+                        <label htmlFor="">User Name:</label>
+                        <input type="text" onInput={onTxtUserNameInput} />
+                        <button onClick={onBtnGreetClick}>Greet</button>
+                        <div className="highlight">{greetMsg}</div>
+                    </>
+                )
+            }
+
+        const MyApp = () => {
+            const [userChoice,setUserChoice] = React.useState('');
+            return (
+                <div>
+                    <button onClick={() => setUserChoice('greeter')}>Greeter</button>
+                    <button onClick={() => setUserChoice('calculator')}>Calculator</button>
+                    <div>User Choice : {userChoice}</div>
+                    { userChoice === 'greeter' && <HelloWorld msg="Have a nice day!"/> }
+                    { userChoice === 'calculator' && <Calculator/> }
+                </div>
+            )
+        }
+        const root = ReactDOM.createRoot (document.getElementById('root'))
+        root.render(<MyApp/>)
+    </script>
+</head>
+<body>
+    <h1>My App</h1>
+    <hr>
+    <div id="root">
+        
+    </div>
+</body>
+</html>
