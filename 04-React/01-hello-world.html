@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+    <script src="babel.min.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <style>
+        #root > .highlight {
+            font-size: 18pt;
+            color : blueviolet;
+        }
+    </style>
+    <script type="text/babel">
+        /* 
+        function HelloWorld(){
+            return (<h1>Hello World</h1>)
+        } 
+        */
+
+        /* 
+        const HelloWorld = () => {
+            return (<h1>Hello World</h1>)
+        } 
+        */
+
+        /* 
+        const HelloWorld = () => (<h1>Hello World</h1>) 
+        */
+            
+        const HelloWorld = () => {
+            let [greetMsg, setGreetMsg] = React.useState('[default greet message]');
+            let [userName, setUserName] = React.useState('');
+
+            const onBtnGreetClick = () => {
+                setGreetMsg(`Hi ${userName}, Have a nice day!`);
+            };
+
+            const onTxtUserNameInput = (evt) => {
+                setUserName(evt.target.value);
+            };
+            
+            return (
+                <>
+                    <h1>Hello World</h1>
+                    <hr />
+                    <label htmlFor="">User Name:</label>
+                    <input type="text" onInput={onTxtUserNameInput}/>
+                    <button onClick={onBtnGreetClick}>Greet</button>
+                    <div className="highlight">{greetMsg}</div>
+                </>
+            )        
+        }
+
+        const rootEle = document.getElementById('root');
+        const root = ReactDOM.createRoot(rootEle); 
+        root.render(<HelloWorld/>)
+       
+    </script>
+</head>
+<body>
+    <div id="root">
+        
+    </div>
+</body>
+</html>
