@@ -65,7 +65,7 @@ let emp = {
 
 let { id, ...z } = emp
 ```
-### Spread Operator (Object)
+## Spread Operator (Object)
 ```
 let emp = {
     id : 100,
@@ -75,3 +75,132 @@ let emp = {
 }
 let newEmp = { ...emp, benefits : 'Healthcare' }
 ```
+## default arguments
+```
+function add(x=10, y=20){
+    return x + y;
+}
+
+add()
+
+add(100)
+
+add(undefined, 200)
+
+add(100,200)
+```
+## Arrow function
+```
+/*
+//function statement
+function add(x,y){
+    return x + y;
+}
+
+//function expression
+let add = function(x,y){
+    return x + y;
+}
+
+//arrow function
+let add = (x,y) => {
+    return x + y;
+}
+*/
+let add = (x,y) => x + y;
+```
+## Iterators (for..of)
+```
+function add(...nos){
+    let result = 0;
+    for (let no of nos)
+        result += no;
+    return result;
+}
+```
+## Template strings
+```
+let x = 10, y = 20
+//'sum of 10 and 20 is 30'
+let s1 = 'sum of ' + x + ' and ' + y + ' is ' + (x + y)
+
+let s2 = `sum of ${x} and ${y} is ${x+y}`
+
+let s3 = `sum of 
+${x} and ${y} 
+is ${x+y}`
+```
+## Object construction enhancements
+```
+let id = 100,
+    name = 'Pen',
+    cost = 10,
+    category = 'stationary'
+
+let product = { 
+    id , 
+    name , 
+    cost , 
+    category,
+    display(){
+        console.log(`id = ${this.id}, name = ${this.name}, cost = ${this.cost}`);
+    }
+}
+```
+## Class
+```
+class Employee {
+
+    // instance field (private)
+    #id = 0;
+
+    // accessor methods
+    get id(){
+        console.log('getter [id]  triggred');
+        return this.#id;
+    }
+    set id(val){
+        console.log('setter [id]  triggred');
+        this.#id = val;
+    }
+    
+    // instance fields (public)
+    name = '';
+    salary = 0;
+
+    // static field
+    static ModelType = 'Employee';
+
+    // constructor method
+    constructor(id, name, salary){
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    // instance methods
+    format(){
+        return `id = ${this.id}, name = ${this.name}, salary = ${this.salary}`
+    }
+
+    //static methods
+    static IsEmployee(obj){
+        return obj instanceof Employee;
+    }
+}
+```
+## class inheritance
+```
+class FulltimeEmployee extends Employee {
+    benefits = '';
+    constructor(id, name, salary, benefits){
+        super(id, name, salary);
+        this.benefits = benefits;
+    }
+    format(){
+        return `${super.format()}, benefits = ${this.benefits}`
+    }
+}
+```
+## Reference
+- http://es6-features.org
