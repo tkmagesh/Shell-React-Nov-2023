@@ -18,25 +18,80 @@
     <script src="babel.min.js"></script>
     <script src="react.development.js"></script>
     <script src="react-dom.development.js"></script>
-    <script type="text/babel"></script>
+    <script type="text/babel">
+        const Calculator = () => {
+            const [result, setResult] = React.useState(0);
+            const [n1, setN1] = React.useState(0);
+            const [n2, setN2] = React.useState(0);
+
+            /* 
+            const onBtnClick = (evt) => {
+                switch (evt.target.innerText) {
+                    case 'Add':
+                        setResult(n1 + n2)
+                        break;
+                    case 'Subtract':
+                        setResult(n1 - n2)
+                        break;
+                    case 'Multiply':
+                        setResult(n1 * n2)
+                        break;
+                    case 'Divide':
+                        setResult(n1 / n2)
+                        break;
+                
+                    default:
+                        break;
+                }
+            } 
+            */
+           const onBtnClick = (operation) => {
+                switch (operation) {
+                    case 'Add':
+                        setResult(n1 + n2)
+                        break;
+                    case 'Subtract':
+                        setResult(n1 - n2)
+                        break;
+                    case 'Multiply':
+                        setResult(n1 * n2)
+                        break;
+                    case 'Divide':
+                        setResult(n1 / n2)
+                        break;
+
+                    default:
+                        break;
+                }
+            } 
+            return (
+                <>
+                    <h1>Calculator</h1>
+                    <div className="field">
+                        <label for="">Number 1:</label>
+                        <input type="number" onInput={(evt) => setN1(parseInt(evt.target.value))}/>
+                    </div>
+                    <div className="field">
+                        <label for="">Number 2:</label>
+                        <input type="number" onInput={(evt) => setN2(parseInt(evt.target.value))}/>
+                    </div>
+                    <br/>
+                    <button onClick={() => onBtnClick('Add')}>Add</button>
+                    <button onClick={() => onBtnClick('Subtract')}>Subtract</button>
+                    <button onClick={() => onBtnClick('Multiply')}>Multiply</button>
+                    <button onClick={() => onBtnClick('Divide')}>Divide</button>
+                    <div className="result">{result}</div>
+                </>
+            )
+        }
+
+        const root = ReactDOM.createRoot (document.getElementById('root'))
+        root.render(<Calculator/>)
+    </script>
 </head>
 <body>
     <div id="root">
-        <h1>Calculator</h1>
-        <div class="field">
-        <label for="">Number 1:</label>
-        <input type="number" name="" id="">
-        </div>
-        <div class="field">
-        <label for="">Number 2:</label>
-        <input type="number" name="" id="">
-        </div>
-        <br>
-        <button>Add</button>
-        <button>Subtract</button>
-        <button>Multiply</button>
-        <button>Divide</button>
-        <div class="result">[Result]</div>
+        
     </div>
 </body>
 </html>
