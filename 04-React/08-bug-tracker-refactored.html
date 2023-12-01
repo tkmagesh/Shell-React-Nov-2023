@@ -61,7 +61,7 @@
      <script type="text/babel">
         const Bugs = () => {
             const [bugs, setBugs] = React.useState([]);
-            const [newBugName, setNewBugName] = React.useState('');
+
 
             const onBtnAddClick = () => {
                 const newBugId = bugs.reduce((prevResult, bug) => prevResult > bug.id ? prevResult : bug.id, 0) + 1;
@@ -90,31 +90,19 @@
                 setBugs(openBugs)
             }
 
-            const getClosedCount = () => {
-                return bugs.reduce((prevResult, bug) => bug.isClosed ? prevResult + 1 : prevResult, 0)
+            const onNewBugCreated = (newBug) => {
+                const newBugId = bugs.reduce((prevResult, bug) => prevResult > bug.id ? prevResult : bug.id, 0) + 1;
+                newBug.id = newBugId
+                const newBugList = [...bugs, newBug]
+                setBugs(newBugList); 
             }
+            
             
             return (
                 <>
-                    <section className="stats">
-                        <span className="closed">{getClosedCount()}</span>
-                        <span> / </span>
-                        <span>{bugs.length}</span>
-                    </section>
-                    <section className="edit">
-                        <label htmlFor="">Bug Name :</label>
-                        <input type="text" onInput={ ({target}) => setNewBugName(target.value)} />
-                        <button onClick={onBtnAddClick}>Add New</button>
-                    </section>
-                    <section className="sort">
-                        <label htmlFor="">Order By :</label>
-                        <select name="" id="">
-                            <option value=""></option>
-                            <option value=""></option>
-                        </select>
-                        <label htmlFor="">Descending ?:</label>
-                        <input type="checkbox" name="" id="" />
-                    </section>
+                    <BugStats bugs={bugs}/>
+                    <BugSort/>
+                    <BugEdit bugCreated={onNewBugCreated}/>
                     <section className="list">
                         <ul>
                             { bugs.map(bug => (
@@ -131,6 +119,52 @@
                         <button onClick={onBtnRemoveClosedClick}>Remove Closed</button>
                     </section>
                 </>
+            )
+        }
+
+        const BugSort = () => {
+            return (
+                <section className="sort">
+                    <label htmlFor="">Order By :</label>
+                    <select name="" id="">
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+                    <label htmlFor="">Descending ?:</label>
+                    <input type="checkbox" name="" id="" />
+                </section>
+            )
+        }
+        const BugStats = ({bugs}) => {
+            const getClosedCount = () => {
+                return bugs.reduce((prevResult, bug) => bug.isClosed ? prevResult + 1 : prevResult, 0)
+            }
+            return (
+                <section className="stats">
+                    <span className="closed">{getClosedCount()}</span>
+                    <span> / </span>
+                    <span>{bugs.length}</span>
+                </section>
+            )
+        }
+
+        const BugEdit = ({bugCreated}) => {
+            const [newBugName, setNewBugName] = React.useState('');
+            const onBtnAddClick = () => {
+                const newBug = {
+                    id: 0,
+                    name: newBugName,
+                    isClosed: false,
+                    createdAt: new Date()
+                }
+                bugCreated(newBug);
+            }
+            return (
+                <section className="edit">
+                    <label htmlFor="">Bug Name :</label>
+                    <input type="text" onInput={({ target }) => setNewBugName(target.value)} />
+                    <button onClick={onBtnAddClick}>Add New</button>
+                </section>
             )
         }
 
