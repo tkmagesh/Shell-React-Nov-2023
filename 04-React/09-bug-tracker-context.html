@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Tracker</title>
+    <!-- 
+        Use Cases:
+        ==================
+        1. Add new bugs
+        2. List the added bugs
+        3. Toggle the 'closed' status of any bug
+        4. Remove any bug
+        5. Remove all 'closed' bugs
+        6. Display stats
+        6b. Refactor the application
+        7. Sort the bugs
+        8. Persist the bugs in the server
+        9. Make the bugs accessible using unique urls (routing)
+        10. Add the projects module and make the bugs related to projects
+     -->
+     <style>
+        body{
+            margin-left: 30px;
+        }
+        section{
+            margin-bottom: 10px;
+        }
+        .closed{
+            font-style: italic;
+            font-weight: bold;
+            text-decoration: line-through;
+            color: red;
+        }
+        .stats, .bugname {
+            font-size: 18pt;
+        }
+        .bugname{
+            cursor: pointer;
+        }
+        .datetime{
+            font-style: italic;
+        }
+        ul{
+            width: 500px;
+            list-style: none;
+            -webkit-padding-start: 0px;
+        }
+        li{
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid gray;
+            background-color: #e7e7e7;
+            border-radius: 10px;
+        }
+
+     </style>
+     <script src="babel.min.js"></script>
+     <script src="react.development.js"></script>
+     <script src="react-dom.development.js"></script>
+     <script type="text/babel">
+
+        
+        class BugService{
+            _list = [];
+            _changeListeners = [];
+
+            subscribe(listernFn){
+                this._changeListeners.push(listernFn);
+            }
+
+            get bugs() {
+                return [...this._list];
+            }
+            set bugs(list){
+                this._list = list;
+                this._changeListeners.forEach(listernFn => listernFn())
+            }
+
+            createNew(newBugName){
+                const newBugId = this._list.reduce((prevResult, bug) => prevResult > bug.id ? prevResult : bug.id, 0) + 1;
+                const newBug = {
+                    id: newBugId,
+                    name: newBugName,
+                    isClosed: false,
+                    createdAt: new Date()
+                }
+                this.bugs = [...this.bugs, newBug]
+            }
+
+            remove(bugToRemove){
+                this.bugs = this.bugs.filter(bug => bug.id !== bugToRemove.id)
+            }
+
+            toggle(bugToToggle){
+                const updatedBug = { ...bugToToggle, isClosed: !bugToToggle.isClosed }
+                this.bugs = this.bugs.map(bug => bug.id === bugToToggle.id ? updatedBug : bug)
+            }
+
+            removeClosed(){
+                this.bugs = this.bugs.filter(bug => !bug.isClosed)
+            }
+
+            getClosedCount(){
+                return this.bugs.reduce((prevResult, bug) => bug.isClosed ? prevResult + 1 : prevResult, 0)
+            }
+        }
+
+        
+        
+        const bugServiceCtx = React.createContext();
+
+        const Bugs = ({bugService}) => {
+            return (
+                <bugServiceCtx.Provider value={bugService}>
+                    <BugStats/>
+                    <BugSort/>
+                    <BugEdit/>
+                    <BugList/>
+                </bugServiceCtx.Provider>
+            )
+        }
+
+        const BugSort = () => {
+            return (
+                <section className="sort">
+                    <label htmlFor="">Order By :</label>
+                    <select name="" id="">
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+                    <label htmlFor="">Descending ?:</label>
+                    <input type="checkbox" name="" id="" />
+                </section>
+            )
+        }
+        const BugStats = () => {
+            const bugService = React.useContext(bugServiceCtx);
+            return (
+                <section className="stats">
+                    <span className="closed">{bugService.getClosedCount()}</span>
+                    <span> / </span>
+                    <span>{bugService.bugs.length}</span>
+                </section>
+            )
+        }
+
+        const BugEdit = () => {
+            const [newBugName, setNewBugName] = React.useState('');
+            const bugService = React.useContext(bugServiceCtx);
+            
+            return (
+                <section className="edit">
+                    <label htmlFor="">Bug Name :</label>
+                    <input type="text" onInput={({ target }) => setNewBugName(target.value)} />
+                    <button onClick={() => bugService.createNew(newBugName)}>Add New</button>
+                </section>
+            )
+        }
+
+        const BugList = () => {
+            const bugService = React.useContext(bugServiceCtx);
+            return (
+                <section className="list">
+                    <ul>
+                        {bugService.bugs.map(bug => (<BugItem key={bug.id} bug={bug}/>))}
+                    </ul>
+                    <button onClick={() => bugService.removeClosed()}>Remove Closed</button>
+                </section>
+            )
+        }
+
+        const BugItem = ({bug}) => {
+            const bugService = React.useContext(bugServiceCtx);
+            return (
+                <li key={bug.id}>
+                    <span
+                        onClick={() => bugService.toggle(bug)}
+                        className={`bugname ${bug.isClosed ? 'closed' : ''}`}>{bug.name}</span>
+                    <div className="datetime">[{bug.createdAt.toString()}]</div>
+                    <button onClick={() => bugService.remove(bug)}>Remove</button>
+                </li>
+            )
+        }
+
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+
+        const bugService = new BugService();
+
+        function renderApp(){
+            root.render(<Bugs bugService={bugService}/>)
+        }
+        renderApp();
+        bugService.subscribe(renderApp);
+     </script>
+</head>
+<body>
+    <h1>Bug Tracker</h1>
+    <hr>
+    <div id="root">    
+        
+    </div>
+</body>
+</html>

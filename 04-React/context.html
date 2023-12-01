@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="babel.min.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <style>
+        div{
+            padding: 10px;
+            border : 1px solid gray;
+            margin: 10px;
+        }
+    </style>
+    <script type="text/babel">
+        const dataContext = React.createContext();
+
+        const App = () => {
+            const counter = {
+                value : 0,
+                increment(){
+                    this.value += 1
+                    console.log('after increment, count :', this.value);
+                }
+            }
+            return (
+                <dataContext.Provider value={counter}>
+                    <div>
+                        <h1>App</h1>
+                        <Component1/>
+                    </div>
+                </dataContext.Provider>
+            )
+        }
+
+        const Component1 = () => {
+            const data = React.useContext(dataContext)
+            return (<div>
+                <h3>Component1</h3>
+                <Component2 />
+            </div>
+            );
+        }
+
+        const Component2 = () => {
+            return (
+            <div>
+                <h3>Component2</h3>
+                <Component3 />
+            </div>
+            );
+        }
+
+        const Component3 = () => {
+            const counter = React.useContext(dataContext)
+            return (
+                <div>
+                <h3>Component3</h3>
+                <p> count : {counter.value}</p>
+                <button onClick={() => counter.increment()}>Increment</button>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App/>);
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
