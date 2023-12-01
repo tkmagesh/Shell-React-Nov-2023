@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Manager</title>
+    <script src="state-manager.js"></script>
+    <script src="babel.min.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script type="text/babel">
+        const Spinner = ({store}) => {
+            const value = store.getState();
+            const onDecrementClick = () => {
+                store.dispatch({type : 'DECREMENT'})
+            }
+            const onIncrementClick = () => {
+                store.dispatch({ type: 'INCREMENT' })
+            }
+            return (
+                <div>
+                    <h1>Spinner</h1>
+                    <hr />
+                    <button onClick={onDecrementClick}>Decrement</button>
+                    <span>[{value}]</span>
+                    <button onClick={onIncrementClick}>Increment</button>
+                </div>
+            )
+        }
+
+        function spinnerReducer(currentState = 50, action) {
+            if (action.type === 'INCREMENT') return currentState + 1;
+            if (action.type === 'DECREMENT') return currentState - 1;
+            return currentState;
+        }
+        
+        const store = StateManager.createStore(spinnerReducer)
+
+        const root = ReactDOM.createRoot(document.getElementById('root'))
+        function renderApp(){
+            root.render(<Spinner store={store}/>)
+        }
+        renderApp()
+        store.subscribe(renderApp);
+    </script>
+</head>
+<body>
+    <div id="root">
+        
+    </div>
+</body>
+</html>
