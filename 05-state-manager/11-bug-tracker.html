@@ -74,9 +74,23 @@
                 }
                 const add_bug_action = { type : 'BUGS_ADD', payload : newBug};
                 return add_bug_action;
+            },
+            toggle(bugToToggle){
+                const toggledBug = {...bugToToggle, isClosed : !bugToToggle.isClosed}
+                const replace_bug_action = { type : 'BUGS_REPLACE', payload : toggledBug}
+                return replace_bug_action
+            },
+            remove(bugToRemove){
+                const remove_bug_action = { type : 'BUGS_REMOVE', payload : bugToRemove}
+                return remove_bug_action;
+            },
+            removeClosed(bugs){
+                const openBugs = bugs.filter(bug => !bug.isClosed)
+                const init_bug_action = { type : 'BUGS_INIT', payload : openBugs}
+                return init_bug_action;
             }
         }
-        const Bugs = ({bugs, addNew}) => {
+        const Bugs = ({bugs, addNew, toggle, remove, removeClosed}) => {
             const [newBugName, setNewBugName] = React.useState(''); 
             const closedCount = bugs.reduce((prevResult, bug ) => bug.isClosed ? prevResult + 1 : prevResult, 0)           
             return (
@@ -106,13 +120,14 @@
                                 <li key={bug.id}>
                                     <span
                                         className={`bugname ${bug.isClosed ? 'closed' : ''}`}
+                                        onClick={() => toggle(bug)}
                                         >{bug.name}</span>
                                     <div className="datetime">[{bug.createdAt.toString()}]</div>
-                                    <button>Remove</button>
+                                    <button onClick={() => remove(bug)}>Remove</button>
                                 </li>
                             ))}
                         </ul>
-                        <button>Remove Closed</button>
+                        <button onClick={() => removeClosed(bugs)}>Remove Closed</button>
                     </section>
                 </>
             )
@@ -141,7 +156,14 @@
                 case 'BUGS_ADD':
                     return [...currentState, action.payload];
                     break;
-            
+                case 'BUGS_REPLACE':
+                    const updatedBug = action.payload;
+                    return currentState.map(bug => bug.id === updatedBug.id ? updatedBug : bug)
+                case 'BUGS_REMOVE':
+                    const bugToRemove = action.payload;
+                    return currentState.filter(bug => bug.id !== bugToRemove.id)
+                case 'BUGS_INIT':
+                    return action.payload;
                 default:
                     break;
             }
