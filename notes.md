@@ -57,3 +57,8 @@ for(let attrName in fns) {
 loggedFns.f1()
 loggedFns.f2()
 ```
+
+## ES6 Modules
+- Everything defined in a file (js/jsx) is by default considered as 'PRIVATE'
+- The public entities have to be explicitly 'EXPORTED'
+- Public entities from other files have to be explicitly 'IMPORTED' to be used
