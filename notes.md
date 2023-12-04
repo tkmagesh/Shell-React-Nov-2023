@@ -1,3 +1,5 @@
+## State Manager
+![image state manager](./images/state-manager.png)
 ```
 function spinnerReducer(currentState = 50, action){
     if (action.type === 'INCREMENT') return currentState + 1;
