@@ -58,20 +58,38 @@
      <script src="babel.min.js"></script>
      <script src="react.development.js"></script>
      <script src="react-dom.development.js"></script>
+     <script src="state-manager.js"></script>
      <script type="text/babel">
-        const Bugs = () => {
-            const [newBugName, setNewBugName] = React.useState('');            
+
+        // TODO : refactor
+        let _currentBugId = 0;
+
+        const bugActionCreators = {
+            addNew(newBugName){
+                const newBug = {
+                    id : ++_currentBugId,
+                    name : newBugName,
+                    isClosed : false,
+                    createdAt : new Date()
+                }
+                const add_bug_action = { type : 'BUGS_ADD', payload : newBug};
+                return add_bug_action;
+            }
+        }
+        const Bugs = ({bugs, addNew}) => {
+            const [newBugName, setNewBugName] = React.useState(''); 
+            const closedCount = bugs.reduce((prevResult, bug ) => bug.isClosed ? prevResult + 1 : prevResult, 0)           
             return (
                 <>
                     <section className="stats">
-                        <span className="closed"></span>
+                        <span className="closed">{closedCount}</span>
                         <span> / </span>
-                        <span></span>
+                        <span>{bugs.length}</span>
                     </section>
                     <section className="edit">
-                        <label htmlFor="">Bug Name :</label>
-                        <input type="text" />
-                        <button >Add New</button>
+                        <label htmlFor="" >Bug Name :</label>
+                        <input type="text" onInput={({ target }) => setNewBugName(target.value)} />
+                        <button onClick={() => addNew(newBugName)} >Add New</button>
                     </section>
                     <section className="sort">
                         <label htmlFor="">Order By :</label>
@@ -84,11 +102,15 @@
                     </section>
                     <section className="list">
                         <ul>
-                                <li >
-                                    <span>[bug.name]</span>
-                                    <div className="datetime">[bug.createdAt.toString()]</div>
-                                    <button >Remove</button>
+                            { bugs.map( bug => (    
+                                <li key={bug.id}>
+                                    <span
+                                        className={`bugname ${bug.isClosed ? 'closed' : ''}`}
+                                        >{bug.name}</span>
+                                    <div className="datetime">[{bug.createdAt.toString()}]</div>
+                                    <button>Remove</button>
                                 </li>
+                            ))}
                         </ul>
                         <button>Remove Closed</button>
                     </section>
@@ -96,8 +118,48 @@
             )
         }
 
+        //For testing UI rendering
+        /* 
+        const initialState = [
+            {
+                id : 1,
+                name : 'Bug-1',
+                isClosed : false,
+                createdAt : new Date()
+            },
+            {
+                id: 2,
+                name: 'Bug-2',
+                isClosed: true,
+                createdAt: new Date()
+            }
+        ] 
+        */
+        const initialState = [];
+        function bugsReducer(currentState = initialState, action){
+            switch (action.type) {
+                case 'BUGS_ADD':
+                    return [...currentState, action.payload];
+                    break;
+            
+                default:
+                    break;
+            }
+            return currentState;
+        }
+
+        const store = StateManager.createStore(bugsReducer);
+
+        const bugActionDispatchers = StateManager.bindActionCreators(bugActionCreators, store.dispatch);
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<Bugs/>)
+
+        function renderApp(){
+            const bugs = store.getState();
+            root.render(<Bugs bugs={bugs} {...bugActionDispatchers}/>)
+        }
+        renderApp();
+        store.subscribe(renderApp)
      </script>
 </head>
 <body>
