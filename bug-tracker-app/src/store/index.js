@@ -28,8 +28,7 @@ const loggerMiddleware = store => next => action => {
 
 const asyncMiddleware = store => next => action => {
     if (typeof action === 'function'){
-        const actionObj = action(store.getState);
-        store.dispatch(actionObj)
+        return action(store.dispatch, store.getState);
     } else {
         next(action);
     }

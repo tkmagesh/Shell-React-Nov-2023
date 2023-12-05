@@ -1,5 +1,5 @@
 export function sort(attrName, isDesc){
-    return function(getState){
+    return function(dispatch, getState){
         const bugs = getState().bugsStore.bugs;
         let comparer = (b1, b2) => {
             if (b1[attrName] < b2[attrName]) return -1;
@@ -19,6 +19,6 @@ export function sort(attrName, isDesc){
             }
         };
         
-        return sort_action;
+        dispatch(sort_action);
     }
 }

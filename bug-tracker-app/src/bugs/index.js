@@ -11,9 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 
-const Bugs = ({}) => { 
+const Bugs = () => { 
     const [showClosed, setShowClosed] = useState(false);   
-    const {addNew, removeClosed, sort } = bindActionCreators(bugActionCreators, useDispatch());
+    const {addNew, removeClosed, sort, load } = bindActionCreators(bugActionCreators, useDispatch());
     const { bugs, sortAttr, sortByDesc } = useSelector(({bugsStore}) => {
         const { bugs, sortAttr, sortByDesc } =  bugsStore
         return {
@@ -26,8 +26,7 @@ const Bugs = ({}) => {
     const closedCount = bugs.reduce((prevResult, bug ) => bug.isClosed ? prevResult + 1 : prevResult, 0)           
     return (
         <>
-            <label>Closed ?:</label>
-            <input type="checkbox" value={showClosed} onChange={({target}) => setShowClosed(target.checked)}/>
+            <button onClick={load}>Load Bugs</button>
             <BugStats count={bugs.length} closedCount={closedCount}/>
             <BugEdit addNew={addNew}/>
             <BugSort sort={sort} sortAttr={sortAttr} sortByDesc={sortByDesc}/>

@@ -8,6 +8,9 @@ import Bugs from './bugs';
 import Projects from './projects';
 import BugRemoveClosed from './bugs/views/bug-remove-closed';
 
+import axios from 'axios';
+window['axios'] = axios;
+
 const App =() => {
     const [userChoice, setUserChoice] = React.useState('');
     return (

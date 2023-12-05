@@ -3,3 +3,4 @@ export { toggle } from './toggle';
 export { remove } from './remove';
 export { removeClosed } from './removeClosed';
 export { sort } from './sort';
+export {load} from './load';
