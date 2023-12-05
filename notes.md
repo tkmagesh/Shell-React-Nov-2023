@@ -62,3 +62,6 @@ loggedFns.f2()
 - Everything defined in a file (js/jsx) is by default considered as 'PRIVATE'
 - The public entities have to be explicitly 'EXPORTED'
 - Public entities from other files have to be explicitly 'IMPORTED' to be used
+
+## Recordings
+- https://bit.ly/react-videos

@@ -10,9 +10,29 @@ const bugActionDispatchers = bindActionCreators(bugActionCreators, store.dispatc
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+const Projects = () => <h3>Projects</h3>;
+
+const App =({bugsState}) => {
+    const [userChoice, setUserChoice] = React.useState('');
+    return (
+    <>
+        <h1>Bug Tracker</h1>
+        <hr/>
+        <div>
+            <button onClick={() => setUserChoice('bugs')}>Bugs</button>
+            <button onClick={() => setUserChoice('projects')}>Projects</button>
+        </div>
+        <div>
+            {userChoice === 'bugs' && <Bugs bugsState={bugsState} {...bugActionDispatchers}/>}
+            {userChoice === 'projects' && <Projects/>}
+        </div>
+    </>
+    )
+}
+
 function renderApp(){
-    const bugs = store.getState();
-    root.render(<Bugs bugs={bugs} {...bugActionDispatchers}/>)
+    const bugsState= store.getState();
+    root.render(<App bugsState={bugsState}/>)
 }
 renderApp();
 store.subscribe(renderApp)
