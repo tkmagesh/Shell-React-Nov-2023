@@ -1,6 +1,11 @@
 import bugsReducer from '../bugs/reducers/bugsReducer';
 import { projectsReducer  } from '../projects';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+import logger from 'redux-logger'
+import { thunk } from 'redux-thunk'
+
+console.log(thunk);
+
 
 /* 
 function loggerMiddleware(store){
@@ -16,6 +21,12 @@ function loggerMiddleware(store){
     }
 } 
 */
+
+
+const rootReducer = combineReducers({
+    bugsStore : bugsReducer,
+    projectsStore : projectsReducer
+})
 
 const loggerMiddleware = store => next => action => {
     console.group(action.type);
@@ -34,13 +45,10 @@ const asyncMiddleware = store => next => action => {
     }
 }
 
-const rootReducer = combineReducers({
-    bugsStore : bugsReducer,
-    projectsStore : projectsReducer
-})
 
 // after adding middleware
-const store = createStore(rootReducer, applyMiddleware(loggerMiddleware, asyncMiddleware));
+//const store = createStore(rootReducer, applyMiddleware(loggerMiddleware, asyncMiddleware));
+const store = createStore(rootReducer, applyMiddleware(logger, thunk));
 // console.log("store.dispatch=>", store.dispatch);
 
 // before adding middleware

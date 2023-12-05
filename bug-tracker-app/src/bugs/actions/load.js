@@ -1,4 +1,5 @@
 import axios from 'axios';
+import bugApi from '../services/bugApi';
 
 const inMemoryBugs = [
     {
@@ -22,18 +23,24 @@ export function load(){
     */
 
     // async (server communication)
-    return function(dispatch){
+    return async function(dispatch){
         /* 
         const response = await axios.get('http://localhost:3030/bugs')
         const load_action = { type : 'BUGS_INIT', payload : response.data}
         return load_action; 
         */
 
+        /* 
         const p = axios.get('http://localhost:3030/bugs')
         p.then(response => {
             const load_action = { type : 'BUGS_INIT', payload : response.data}
             dispatch(load_action); 
-        })
+        }) 
+        */
+
+        const bugs = await bugApi.getAll()
+        const load_action = { type : 'BUGS_INIT', payload : bugs}
+        dispatch(load_action); 
     }
     
 }
